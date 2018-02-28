@@ -1,45 +1,46 @@
 {
-    "name": "gloudemans/shoppingcart",
-    "description": "Laravel Shoppingcart",
-    "keywords": ["laravel", "shoppingcart"],
+    "name": "ollywarren/shoppingcart",
+    "description": "Laravel 5.5+ Shopping Cart Package based on the Original Rob Gloudemans Package",
+    "keywords": ["laravel", "shoppingcart", "shipping", "discount codes"],
     "license": "MIT",
     "authors": [
         {
             "name": "Rob Gloudemans",
             "email": "info@robgloudemans.nl"
+        },
+        {
+            "name": "Olly Warren",
+            "email": "olly@ollywarren.com"
         }
     ],
     "require": {
-        "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
-        "illuminate/session": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
-        "illuminate/events": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*"
+        "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6*",
+        "illuminate/session": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6*",
+        "illuminate/events": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.0|~6.0",
+        "phpunit/phpunit": "~5.0|~6.0|~7.0",
         "mockery/mockery": "~0.9.0",
-        "orchestra/testbench": "~3.1"
+        "orchestra/testbench": "~3.0"
     },
     "autoload": {
         "psr-4": {
-            "Gloudemans\\Shoppingcart\\": "src/"
+            "Ollywarren\\ShoppingCart\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Gloudemans\\Tests\\Shoppingcart\\": "tests/"
+            "Ollywarren\\Tests\\ShoppingCart\\": "tests/"
         }
-    },
-    "suggest": {
-        "gloudemans/notify": "Simple flash notifications for Laravel"
     },
     "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
-                "Gloudemans\\Shoppingcart\\ShoppingcartServiceProvider"
+                "Ollywarren\\ShoppingCart\\ShoppingCartServiceProvider"
             ],
             "aliases": {
-                "Cart": "Gloudemans\\Shoppingcart\\Facades\\Cart"
+                "Cart": "Ollywarren\\ShoppingCart\\Facades\\Cart"
             }
         }
     }

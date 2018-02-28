@@ -1,20 +1,20 @@
 <?php
 
-namespace Gloudemans\Tests\Shoppingcart;
+namespace Ollywarren\Tests\ShoppingCart;
 
 use Mockery;
 use PHPUnit\Framework\Assert;
-use Gloudemans\Shoppingcart\Cart;
+use Ollywarren\ShoppingCart\Cart;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Collection;
-use Gloudemans\Shoppingcart\CartItem;
+use Ollywarren\ShoppingCart\CartItem;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Session\SessionManager;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Gloudemans\Shoppingcart\ShoppingcartServiceProvider;
-use Gloudemans\Tests\Shoppingcart\Fixtures\ProductModel;
-use Gloudemans\Tests\Shoppingcart\Fixtures\BuyableProduct;
+use Ollywarren\ShoppingCart\ShoppingCartServiceProvider;
+use Ollywarren\Tests\Shoppingcart\Fixtures\ProductModel;
+use Ollywarren\Tests\Shoppingcart\Fixtures\BuyableProduct;
 
 class CartTest extends TestCase
 {
@@ -931,7 +931,7 @@ class CartTest extends TestCase
 
     /**
      * Set the config number format.
-     * 
+     *
      * @param int    $decimals
      * @param string $decimalPoint
      * @param string $thousandSeperator

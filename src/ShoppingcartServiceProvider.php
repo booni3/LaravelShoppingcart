@@ -1,12 +1,12 @@
 <?php
 
-namespace Gloudemans\Shoppingcart;
+namespace Ollywarren\Shoppingcart;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\ServiceProvider;
 
-class ShoppingcartServiceProvider extends ServiceProvider
+class ShoppingCartServiceProvider extends ServiceProvider
 {
 
     /**
@@ -16,7 +16,7 @@ class ShoppingcartServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('cart', 'Gloudemans\Shoppingcart\Cart');
+        $this->app->bind('cart', 'Ollywarren\ShoppingCart\Cart');
 
         $config = __DIR__ . '/../config/cart.php';
         $this->mergeConfigFrom($config, 'cart');
@@ -29,7 +29,7 @@ class ShoppingcartServiceProvider extends ServiceProvider
             }
         });
 
-        if ( ! class_exists('CreateShoppingcartTable')) {
+        if (! class_exists('CreateShoppingCartTable')) {
             // Publish the migration
             $timestamp = date('Y_m_d_His', time());
 

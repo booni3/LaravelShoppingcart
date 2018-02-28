@@ -1,6 +1,6 @@
 <?php
 
-namespace Gloudemans\Shoppingcart;
+namespace Ollywarren\ShoppingCart;
 
 use Illuminate\Support\Collection;
 

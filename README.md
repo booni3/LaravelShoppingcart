@@ -1,11 +1,11 @@
-## LaravelShoppingcart
+## Laravel Shopping Cart - a Simple Shopping Cart Solution
 [![Build Status](https://travis-ci.org/Crinsane/LaravelShoppingcart.png?branch=master)](https://travis-ci.org/Crinsane/LaravelShoppingcart)
 [![Total Downloads](https://poser.pugx.org/gloudemans/shoppingcart/downloads.png)](https://packagist.org/packages/gloudemans/shoppingcart)
 [![Latest Stable Version](https://poser.pugx.org/gloudemans/shoppingcart/v/stable)](https://packagist.org/packages/gloudemans/shoppingcart)
 [![Latest Unstable Version](https://poser.pugx.org/gloudemans/shoppingcart/v/unstable)](https://packagist.org/packages/gloudemans/shoppingcart)
 [![License](https://poser.pugx.org/gloudemans/shoppingcart/license)](https://packagist.org/packages/gloudemans/shoppingcart)
 
-A simple shoppingcart implementation for Laravel.
+A fork of the great "Laravel Shopping Cart" by Rob Gloudemans which adds a few extra features and updates the package requirements.
 
 ## Installation
 
@@ -13,21 +13,21 @@ Install the package through [Composer](http://getcomposer.org/).
 
 Run the Composer require command from the Terminal:
 
-    composer require gloudemans/shoppingcart
+    composer require ollywarren/shoppingcart
     
-If you're using Laravel 5.5, this is all there is to do. 
+If you're using Laravel 5.5+ just let package auto discovery do its thing.
 
 Should you still be on version 5.4 of Laravel, the final steps for you are to add the service provider of the package and alias the package. To do this open your `config/app.php` file.
 
 Add a new line to the `providers` array:
 
-	Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class
+	Ollywarren\ShoppingCart\ShoppingCartServiceProvider::class
 
 And optionally add a new line to the `aliases` array:
 
-	'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
+	'Cart' => Ollywarren\ShoppingCart\Facades\Cart::class,
 
-Now you're ready to start using the shoppingcart in your application.
+Now you're ready to start using the Shopping Cart in your application.
 
 **As of version 2 of this package it's possibly to use dependency injection to inject an instance of the Cart class into your controller or other class**
 

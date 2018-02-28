@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default tax rate
+    | Default tax rate - Default UK 20%
     |--------------------------------------------------------------------------
     |
     | This default tax rate will be used when you make a class implement the
@@ -12,11 +12,11 @@ return [
     |
     */
 
-    'tax' => 21,
+    'tax' => 20,
 
     /*
     |--------------------------------------------------------------------------
-    | Shoppingcart database settings
+    | ShoppingCart database settings
     |--------------------------------------------------------------------------
     |
     | Here you can set the connection that the shoppingcart should use when
