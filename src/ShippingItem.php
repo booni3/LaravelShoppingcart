@@ -83,7 +83,7 @@ class ShippingItem implements Arrayable, Jsonable
         $this->name     = $name;
         $this->qty      = 1;
         $this->price    = floatval($price);
-        $this->rowId    = $this->generateRowId($id);
+        $this->rowId    = $this->generateRowId($id, $name, $price);
     }
 
     /**
@@ -319,7 +319,7 @@ class ShippingItem implements Arrayable, Jsonable
      * @param array  $options
      * @return string
      */
-    protected function generateRowId($id)
+    protected function generateRowId($id, $name, $price)
     {
         return md5($id . $name . $price);
     }
