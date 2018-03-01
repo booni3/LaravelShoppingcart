@@ -181,7 +181,7 @@ class ShippingItem implements Arrayable, Jsonable
     }
 
     /**
-     * Update the cart item from a Buyable.
+     * Update the cart item from a Shippable.
      *
      * @param \Ollywarren\ShoppingCart\Contracts\Shippable $item
      * @return void

@@ -124,8 +124,18 @@ class Cart
     public function shipping($id, $name = null, $price = null)
     {
         $shippingItem = $this->createShippingItem($id, $name, $price);
+
         $content = $this->getContent();
 
+        // Check theres not already a Shipping Method Applied
+        $check = collect($content->filter(function ($value, $key) {
+            return $value instanceof ShippingItem;
+        })->all());
+
+        if ($check->count() == 1) {
+            $content->forget($check->first());
+        }
+        
         $content->put($shippingItem->rowId, $shippingItem);
         
         $this->events->fire('shipping.added', $shippingItem);
