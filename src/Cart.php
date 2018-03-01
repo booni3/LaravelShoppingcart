@@ -121,14 +121,10 @@ class Cart
      * @param float     $price
      * @return  \Ollywarren\ShoppingCart\ShippingItem
      */
-    public function shipping($id, $name = null, $qty = null, $price = null)
+    public function shipping($id, $name = null, $price = null)
     {
-        $shippingItem = $this->createShippingItem($id, $name, $qty, $price, $options);
+        $shippingItem = $this->createShippingItem($id, $name, $price);
         $content = $this->getContent();
-
-        if ($content->has($shippingItem->rowId)) {
-            $shippingItem->qty += $content->get($shippingItem->rowId)->qty;
-        }
 
         $content->put($shippingItem->rowId, $shippingItem);
         
@@ -524,18 +520,16 @@ class Cart
      * @param array     $options
      * @return \Ollywarren\ShoppingCart\ShippingItem
      */
-    private function createShippingItem($id, $name, $qty, $price)
+    private function createShippingItem($id, $name, $price)
     {
         if ($id instanceof Shippable) {
-            $shippingItem = ShippingItem::fromShippable($id, $qty);
+            $shippingItem = ShippingItem::fromShippable($id);
             $shippingItem->setQuantity($name ?: 1);
             $shippingItem->associate($id);
         } elseif (is_array($id)) {
-            $shippingItem = CartItem::fromArray($id);
-            $shippingItem->setQuantity($id['qty']);
+            $shippingItem = ShippingItem::fromArray($id);
         } else {
-            $shippingItem = CartItem::fromAttributes($id, $name, $price);
-            $shippingItem->setQuantity($qty);
+            $shippingItem = ShippingItem::fromAttributes($id, $name, $price);
         }
 
         $shippingItem->setTaxRate(config('cart.tax'));
