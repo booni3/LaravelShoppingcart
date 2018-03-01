@@ -8,6 +8,7 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Contracts\Events\Dispatcher;
 use Ollywarren\ShoppingCart\Contracts\Buyable;
+use Ollywarren\ShoppingCart\Contracts\Shippable;
 use Ollywarren\ShoppingCart\Exceptions\UnknownModelException;
 use Ollywarren\ShoppingCart\Exceptions\InvalidRowIDException;
 use Ollywarren\ShoppingCart\Exceptions\CartAlreadyStoredException;
@@ -112,6 +113,33 @@ class Cart
     }
 
     /**
+     * Add a Shipping Item to the Cart
+     *
+     * @param mixed     $id
+     * @param mixed     $name
+     * @param int|float $qty
+     * @param float     $price
+     * @return  \Ollywarren\ShoppingCart\ShippingItem
+     */
+    public function shipping($id, $name = null, $qty = null, $price = null)
+    {
+        $shippingItem = $this->createShippingItem($id, $name, $qty, $price, $options);
+        $content = $this->getContent();
+
+        if ($content->has($shippingItem->rowId)) {
+            $shippingItem->qty += $content->get($shippingItem->rowId)->qty;
+        }
+
+        $content->put($shippingItem->rowId, $shippingItem);
+        
+        $this->events->fire('shipping.added', $shippingItem);
+
+        $this->session->put($this->instance, $content);
+
+        return $shippingItem;
+    }
+
+    /**
      * Update the cart item with the given rowId.
      *
      * @param string $rowId
@@ -124,6 +152,8 @@ class Cart
 
         if ($qty instanceof Buyable) {
             $cartItem->updateFromBuyable($qty);
+        } elseif ($qty instanceof Shippable) {
+            $cartItem->updateFromShippable($qty);
         } elseif (is_array($qty)) {
             $cartItem->updateFromArray($qty);
         } else {
@@ -225,6 +255,23 @@ class Cart
         $content = $this->getContent();
 
         return $content->sum('qty');
+    }
+
+    /**
+     * Get the Number of Product Lines in the Cart
+     * excluding shipping
+     *
+     * @return int|float
+     */
+    public function lines()
+    {
+        $content = $this->getContent();
+
+        $filter = $content->filter(function ($value, $key) {
+            return $value instanceof Buyable;
+        })->all();
+
+        return $filter->count();
     }
 
     /**
@@ -468,6 +515,35 @@ class Cart
     }
 
     /**
+     * Create a new ShippingItem from the supplied attributes.
+     *
+     * @param mixed     $id
+     * @param mixed     $name
+     * @param int|float $qty
+     * @param float     $price
+     * @param array     $options
+     * @return \Ollywarren\ShoppingCart\ShippingItem
+     */
+    private function createShippingItem($id, $name, $qty, $price)
+    {
+        if ($id instanceof Shippable) {
+            $shippingItem = ShippingItem::fromShippable($id, $qty);
+            $shippingItem->setQuantity($name ?: 1);
+            $shippingItem->associate($id);
+        } elseif (is_array($id)) {
+            $shippingItem = CartItem::fromArray($id);
+            $shippingItem->setQuantity($id['qty']);
+        } else {
+            $shippingItem = CartItem::fromAttributes($id, $name, $price);
+            $shippingItem->setQuantity($qty);
+        }
+
+        $shippingItem->setTaxRate(config('cart.tax'));
+
+        return $shippingItem;
+    }
+
+    /**
      * Check if the item is a multidimensional array or an array of Buyables.
      *
      * @param mixed $item
@@ -534,7 +610,7 @@ class Cart
      * @param $thousandSeperator
      * @return string
      */
-    private function numberFormat($value, $decimals, $decimalPoint, $thousandSeperator)
+    private function numberFormat($value, $decimals, $decimalPoint, $thousandSeperator, $currency = null)
     {
         if (is_null($decimals)) {
             $decimals = is_null(config('cart.format.decimals')) ? 2 : config('cart.format.decimals');
@@ -546,6 +622,9 @@ class Cart
             $thousandSeperator = is_null(config('cart.format.thousand_seperator')) ? ',' : config('cart.format.thousand_seperator');
         }
 
-        return number_format($value, $decimals, $decimalPoint, $thousandSeperator);
+        if (is_null($currency)) {
+            $currency= is_null(config('cart.format.currency')) ? '' : config('cart.format.currency');
+        }
+        return $currency . number_format($value, $decimals, $decimalPoint, $thousandSeperator);
     }
 }
