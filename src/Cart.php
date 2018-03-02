@@ -117,7 +117,6 @@ class Cart
      *
      * @param mixed     $id
      * @param mixed     $name
-     * @param int|float $qty
      * @param float     $price
      * @return  \Ollywarren\ShoppingCart\ShippingItem
      */
@@ -142,6 +141,29 @@ class Cart
         $this->session->put($this->instance, $content);
 
         return $shippingItem;
+    }
+
+    /**
+     * Add a Discount Item to the Cart
+     *
+     * @param mixed     $id
+     * @param mixed     $name
+     * @param float     $value
+     * @return  \Ollywarren\ShoppingCart\ShippingItem
+     */
+    public function discount($id, $name = null, $value = null)
+    {
+        $discountItem = $this->createDiscountItem($id, $name, $value);
+
+        $content = $this->getContent();
+
+        $content->put($discountItem->rowId, $discountItem);
+
+        $this->events->fire('discount.added', $discountItem);
+
+        $this->session->put($this->instance, $content);
+
+        return $discountItem;
     }
 
     /**
@@ -264,7 +286,7 @@ class Cart
 
     /**
      * Get the Number of Product Lines in the Cart
-     * excluding shipping
+     * excluding shipping and Discounts
      *
      * @return int|float
      */
@@ -273,7 +295,7 @@ class Cart
         $content = $this->getContent();
 
         $filter = $content->filter(function ($value, $key) {
-            return $value instanceof Buyable;
+            return $value instanceof CartItem;
         })->all();
 
         return $filter->count();
@@ -524,9 +546,7 @@ class Cart
      *
      * @param mixed     $id
      * @param mixed     $name
-     * @param int|float $qty
      * @param float     $price
-     * @param array     $options
      * @return \Ollywarren\ShoppingCart\ShippingItem
      */
     private function createShippingItem($id, $name, $price)
@@ -544,6 +564,24 @@ class Cart
         $shippingItem->setTaxRate(config('cart.tax'));
 
         return $shippingItem;
+    }
+
+    /**
+     * Create a new ShippingItem from the supplied attributes.
+     *
+     * @param mixed     $id
+     * @param mixed     $name
+     * @param float     $value
+     * @return \Ollywarren\ShoppingCart\DiscountItem
+     */
+    private function createDiscountItem($id, $name, $value)
+    {
+        if (is_array($id)) {
+            $discountItem = DiscountItem::fromArray($id);
+        } else {
+            $discountItem = DiscountItem::fromAttributes($id, $name, $value);
+        }
+        return $discountItem;
     }
 
     /**
