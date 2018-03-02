@@ -127,7 +127,6 @@ class Cart
 
         $content = $this->getContent();
 
-        // Check theres not already a Shipping Method Applied
         $check = collect($content->filter(function ($value, $key) {
             return $value instanceof ShippingItem;
         })->all());
@@ -135,7 +134,7 @@ class Cart
         if ($check->count() == 1) {
             $content->forget($check->first());
         }
-        
+
         $content->put($shippingItem->rowId, $shippingItem);
         
         $this->events->fire('shipping.added', $shippingItem);
