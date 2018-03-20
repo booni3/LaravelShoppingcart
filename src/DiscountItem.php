@@ -4,6 +4,7 @@ namespace Ollywarren\ShoppingCart;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Ollywarren\ShoppingCart\Contracts\Discountable;
 
 class DiscountItem implements Arrayable, Jsonable
 {
@@ -88,6 +89,18 @@ class DiscountItem implements Arrayable, Jsonable
         }
 
         return null;
+    }
+
+    /**
+     * Create a new instance from a Discountable.
+     *
+     * @param \Ollywarren\ShoppingCart\Contracts\Discountable $item
+     * @param array                                      $options
+     * @return \Ollywarren\ShoppingCart\DiscountItem
+     */
+    public static function fromDiscountable(Discountable $item, array $options = [])
+    {
+        return new self($item->getDiscountableIdentifier($options), $item->getDiscountableDescription($options), $item->getDiscountableValue($options), $options);
     }
 
     /**

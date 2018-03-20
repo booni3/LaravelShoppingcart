@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Session\SessionManager;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Ollywarren\ShoppingCart\ShoppingCartServiceProvider;
-use Ollywarren\Tests\Shoppingcart\Fixtures\ProductModel;
-use Ollywarren\Tests\Shoppingcart\Fixtures\BuyableProduct;
+use Ollywarren\Tests\ShoppingCart\Fixtures\ProductModel;
+use Ollywarren\Tests\ShoppingCart\Fixtures\BuyableProduct;
+use Ollywarren\Tests\ShoppingCart\Fixtures\DiscountObject;
 
 class CartTest extends TestCase
 {
@@ -98,6 +99,20 @@ class CartTest extends TestCase
         $this->assertEquals(1, $cart->count());
 
         Event::assertDispatched('cart.added');
+    }
+
+    /** @test */
+    public function it_can_add_an_discount_item()
+    {
+        Event::fake();
+
+        $cart = $this->getCart();
+
+        $cart->add(new DiscountObject);
+
+        $this->assertEquals(1, $cart->count());
+
+        Event::assertDispatched('discount.added');
     }
 
     /** @test */
@@ -340,7 +355,7 @@ class CartTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException
+     * @expectedException \Ollywarren\ShoppingCart\Exceptions\InvalidRowIDException
      */
     public function it_will_throw_an_exception_if_a_rowid_was_not_found()
     {
@@ -485,7 +500,7 @@ class CartTest extends TestCase
                 'name' => 'Item name',
                 'qty' => 1,
                 'price' => 10.00,
-                'tax' => 2.10,
+                'tax' => 2.00,
                 'subtotal' => 10.0,
                 'options' => [],
             ],
@@ -495,7 +510,7 @@ class CartTest extends TestCase
                 'name' => 'Item name',
                 'qty' => 1,
                 'price' => 10.00,
-                'tax' => 2.10,
+                'tax' => 2.00,
                 'subtotal' => 10.0,
                 'options' => [],
             ]
@@ -525,7 +540,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(2, 'Second item', 25.00), 2);
 
         $this->assertItemsInCart(3, $cart);
-        $this->assertEquals(60.00, $cart->subtotal());
+        $this->assertEquals('£60.00', $cart->subtotal());
     }
 
     /** @test */
@@ -537,7 +552,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(2, 'Second item', 2500.00), 2);
 
         $this->assertItemsInCart(3, $cart);
-        $this->assertEquals('6.000,00', $cart->subtotal(2, ',', '.'));
+        $this->assertEquals('£6.000,00', $cart->subtotal(2, ',', '.'));
     }
 
     /** @test */
@@ -620,7 +635,7 @@ class CartTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Gloudemans\Shoppingcart\Exceptions\UnknownModelException
+     * @expectedException \Ollywarren\ShoppingCart\Exceptions\UnknownModelException
      * @expectedExceptionMessage The supplied model SomeModel does not exist.
      */
     public function it_will_throw_an_exception_when_a_non_existing_model_is_being_associated()
@@ -680,7 +695,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(2.10, $cartItem->tax);
+        $this->assertEquals(2.00, $cartItem->tax);
     }
 
     /** @test */
@@ -706,7 +721,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals('2.100,00', $cartItem->tax(2, ',', '.'));
+        $this->assertEquals('2.000,00', $cartItem->tax(2, ',', '.'));
     }
 
     /** @test */
@@ -717,7 +732,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(1, 'Some title', 10.00), 1);
         $cart->add(new BuyableProduct(2, 'Some title', 20.00), 2);
 
-        $this->assertEquals(10.50, $cart->tax);
+        $this->assertEquals('£10.00', $cart->tax);
     }
 
     /** @test */
@@ -728,7 +743,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(1, 'Some title', 1000.00), 1);
         $cart->add(new BuyableProduct(2, 'Some title', 2000.00), 2);
 
-        $this->assertEquals('1.050,00', $cart->tax(2, ',', '.'));
+        $this->assertEquals('£1.000,00', $cart->tax(2, ',', '.'));
     }
 
     /** @test */
@@ -739,7 +754,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(1, 'Some title', 10.00), 1);
         $cart->add(new BuyableProduct(2, 'Some title', 20.00), 2);
 
-        $this->assertEquals(50.00, $cart->subtotal);
+        $this->assertEquals('£50.00', $cart->subtotal);
     }
 
     /** @test */
@@ -750,7 +765,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(1, 'Some title', 1000.00), 1);
         $cart->add(new BuyableProduct(2, 'Some title', 2000.00), 2);
 
-        $this->assertEquals('5000,00', $cart->subtotal(2, ',', ''));
+        $this->assertEquals('£5000,00', $cart->subtotal(2, ',', ''));
     }
 
     /** @test */
@@ -763,13 +778,13 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(1, 'Some title', 1000.00), 1);
         $cart->add(new BuyableProduct(2, 'Some title', 2000.00), 2);
 
-        $this->assertEquals('5000,00', $cart->subtotal());
-        $this->assertEquals('1050,00', $cart->tax());
-        $this->assertEquals('6050,00', $cart->total());
+        $this->assertEquals('£5000,00', $cart->subtotal());
+        $this->assertEquals('£1000,00', $cart->tax());
+        $this->assertEquals('£6000,00', $cart->total());
 
-        $this->assertEquals('5000,00', $cart->subtotal);
-        $this->assertEquals('1050,00', $cart->tax);
-        $this->assertEquals('6050,00', $cart->total);
+        $this->assertEquals('£5000,00', $cart->subtotal);
+        $this->assertEquals('£1000,00', $cart->tax);
+        $this->assertEquals('£6000,00', $cart->total);
     }
 
     /** @test */
@@ -784,11 +799,11 @@ class CartTest extends TestCase
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
         $this->assertEquals('2000,00', $cartItem->price());
-        $this->assertEquals('2420,00', $cartItem->priceTax());
+        $this->assertEquals('2400,00', $cartItem->priceTax());
         $this->assertEquals('4000,00', $cartItem->subtotal());
-        $this->assertEquals('4840,00', $cartItem->total());
-        $this->assertEquals('420,00', $cartItem->tax());
-        $this->assertEquals('840,00', $cartItem->taxTotal());
+        $this->assertEquals('4800,00', $cartItem->total());
+        $this->assertEquals('400,00', $cartItem->tax());
+        $this->assertEquals('800,00', $cartItem->taxTotal());
     }
 
     /** @test */
@@ -815,7 +830,7 @@ class CartTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException
+     * @expectedException \Ollywarren\ShoppingCart\Exceptions\CartAlreadyStoredException
      * @expectedExceptionMessage A cart with identifier 123 was already stored.
      */
     public function it_will_throw_an_exception_when_a_cart_was_already_stored_using_the_specified_identifier()
@@ -890,16 +905,16 @@ class CartTest extends TestCase
 
         $cart->setTax('027c91341fd5cf4d2579b49c4b6a90da', 19);
 
-        $this->assertEquals(10.00, $cartItem->price(2));
-        $this->assertEquals(11.90, $cartItem->priceTax(2));
-        $this->assertEquals(20.00, $cartItem->subtotal(2));
-        $this->assertEquals(23.80, $cartItem->total(2));
-        $this->assertEquals(1.90, $cartItem->tax(2));
-        $this->assertEquals(3.80, $cartItem->taxTotal(2));
+        $this->assertEquals('10.00', $cartItem->price(2));
+        $this->assertEquals('11.90', $cartItem->priceTax(2));
+        $this->assertEquals('20.00', $cartItem->subtotal(2));
+        $this->assertEquals('23.80', $cartItem->total(2));
+        $this->assertEquals('1.90', $cartItem->tax(2));
+        $this->assertEquals('3.80', $cartItem->taxTotal(2));
 
-        $this->assertEquals(20.00, $cart->subtotal(2));
-        $this->assertEquals(23.80, $cart->total(2));
-        $this->assertEquals(3.80, $cart->tax(2));
+        $this->assertEquals('£20.00', $cart->subtotal(2));
+        $this->assertEquals('£23.80', $cart->total(2));
+        $this->assertEquals('£3.80', $cart->tax(2));
     }
 
     /** @test */

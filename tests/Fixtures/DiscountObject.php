@@ -2,9 +2,9 @@
 
 namespace Ollywarren\Tests\ShoppingCart\Fixtures;
 
-use Ollywarren\ShoppingCart\Contracts\Buyable;
+use Ollywarren\ShoppingCart\Contracts\Discountable;
 
-class BuyableProduct implements Buyable
+class DiscountObject implements Discountable
 {
     /**
      * @var int|string
@@ -19,7 +19,7 @@ class BuyableProduct implements Buyable
     /**
      * @var float
      */
-    private $price;
+    private $value;
 
     /**
      * BuyableProduct constructor.
@@ -28,11 +28,11 @@ class BuyableProduct implements Buyable
      * @param string     $name
      * @param float      $price
      */
-    public function __construct($id = 1, $name = 'Item name', $price = 10.00)
+    public function __construct($id = 1, $name = 'Discount item name', $value = 10.00)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->price = $price;
+        $this->value = $value;
     }
 
     /**
@@ -40,7 +40,7 @@ class BuyableProduct implements Buyable
      *
      * @return int|string
      */
-    public function getBuyableIdentifier($options = null)
+    public function getDiscountableIdentifier($options = null)
     {
         return $this->id;
     }
@@ -50,7 +50,7 @@ class BuyableProduct implements Buyable
      *
      * @return string
      */
-    public function getBuyableDescription($options = null)
+    public function getDiscountableDescription($options = null)
     {
         return $this->name;
     }
@@ -60,8 +60,8 @@ class BuyableProduct implements Buyable
      *
      * @return float
      */
-    public function getBuyablePrice($options = null)
+    public function getDiscountableValue($options = null)
     {
-        return $this->price;
+        return $this->value;
     }
 }
