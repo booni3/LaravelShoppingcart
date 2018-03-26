@@ -3,7 +3,7 @@
 namespace Ollywarren\ShoppingCart;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Ollywarren\ShoppingCart\Contracts\Buyable;
+use Ollywarren\ShoppingCart\Contracts\Shippable;
 use Illuminate\Contracts\Support\Jsonable;
 
 class ShippingItem implements Arrayable, Jsonable
