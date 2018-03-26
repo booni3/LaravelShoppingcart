@@ -301,11 +301,13 @@ class Cart
         $content = $this->getContent();
 
         foreach ($content as $row) {
-            if ($row->options->weight) {
-                if ($row->options->unit == 'Metric') {
-                    $weightSplit['metric']  = $weightSplit['metric'] + ($row->options->weight * $row->qty);
-                } else {
-                    $weightSplit['imperial']  = $weightSplit['imperial'] + ($row->options->weight * $row->qty);
+            if ($row instanceof CartItem) {
+                if ($row->options->weight) {
+                    if ($row->options->unit == 'Metric') {
+                        $weightSplit['metric']  = $weightSplit['metric'] + ($row->options->weight * $row->qty);
+                    } else {
+                        $weightSplit['imperial']  = $weightSplit['imperial'] + ($row->options->weight * $row->qty);
+                    }
                 }
             }
         }
@@ -397,8 +399,6 @@ class Cart
     public function subtotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
         $content = $this->getContent();
-
-        // Find any discountable items and apply the value where appropriate.
 
         $subTotal = $content->reduce(function ($subTotal, $cartItem) {
             if (!$cartItem instanceof Discountable) {
