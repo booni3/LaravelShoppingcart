@@ -398,8 +398,10 @@ class Cart
 
         // Find any discountable items and apply the value where appropriate.
 
-        $subTotal = $content->reduce(function ($subTotal, CartItem $cartItem) {
-            return $subTotal + ($cartItem->qty * $cartItem->price);
+        $subTotal = $content->reduce(function ($subTotal, $cartItem) {
+            if (!$cartItem instanceof Discountable) {
+                return $subTotal + ($cartItem->qty * $cartItem->price);
+            }
         }, 0);
 
         return $this->numberFormat($subTotal, $decimals, $decimalPoint, $thousandSeperator);
