@@ -317,8 +317,10 @@ class Cart
         $metricConversion   = new Mass($metricTotal->toUnit('pounds'), 'pounds');
 
         $weight = [
-            'imperial'  => $imperialTotal->add($metricConversion)->toUnit('pounds'),
-            'metric'    => $metricTotal->add($imperialConversion)->toUnit('kilograms')
+            'lbs'       => $imperialTotal->add($metricConversion)->toUnit('pounds'),
+            'ounces'    => $imperialTotal->add($metricConversion)->toUnit('ounces'),
+            'kgs'       => $metricTotal->add($imperialConversion)->toUnit('kilograms'),
+            'grams'     => $metricTotal->add($imperialConversion)->toUnit('grams')
         ];
 
         return collect($weight);
