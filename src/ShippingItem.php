@@ -282,9 +282,9 @@ class ShippingItem implements Arrayable, Jsonable
      * @param array                          $options
      * @return \Ollywarren\ShoppingCart\ShippingItem
      */
-    public static function fromShippable(Buyable $item)
+    public static function fromShippable(Shippable $item)
     {
-        return new self($item->getBuyableIdentifier(), $item->getBuyableDescription(), $item->getBuyablePrice());
+        return new self($item->getShippableIdentifier(), $item->getShippableDescription(), $item->getShippablePrice());
     }
 
     /**
