@@ -16,7 +16,8 @@
     "require": {
         "illuminate/support": "^5.5",
         "illuminate/session": "^5.5",
-        "illuminate/events": "^5.5"
+        "illuminate/events": "^5.5",
+        "php-units-of-measure/php-units-of-measure": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.0",

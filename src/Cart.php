@@ -286,12 +286,30 @@ class Cart
 
     public function weight()
     {
-        $weight = 0;
+        $weightSplit = [
+            'imperial'  => 0,
+            'metric'    => 0
+        ];
+
         $content = $this->getContent();
 
         foreach ($content as $row) {
-            dd($row);
+            if ($row->options->weight) {
+                if ($row->options->unit == 'Metric') {
+                    $weight['metric']  = $weight['metric'] + $row->options->weight;
+                } else {
+                    $weight['imperial']  = $weight['imperial'] + $row->options->weight;
+                }
+            }
         }
+
+        // Convert the two types inot a total of each Type
+        $imperialToMetricTotal = '';
+        $metricToImperialTotal = '';
+
+        
+
+        return collect($weight);
     }
 
     /**
