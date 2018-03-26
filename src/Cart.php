@@ -14,6 +14,7 @@ use Ollywarren\ShoppingCart\Exceptions\UnknownModelException;
 use Ollywarren\ShoppingCart\Exceptions\InvalidRowIDException;
 use Ollywarren\ShoppingCart\Exceptions\CartAlreadyStoredException;
 use Ollywarren\ShoppingCart\Contracts\Discountable;
+use Ollywarren\ShoppingCart\CartItem;
 
 class Cart
 {
@@ -420,11 +421,14 @@ class Cart
     public function subtotalExcShipping($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
         $content = $this->getContent();
+        $filtered = $content->filter(function ($value, $key) {
+            return $value instanceof CartItem;
+        });
+
+        $content = collect($filtered->all());
 
         $subTotal = $content->reduce(function ($subTotal, $cartItem) {
-            if ($cartItem instanceof CartItem) {
-                return $subTotal + ($cartItem->qty * $cartItem->price);
-            }
+            return $subTotal + ($cartItem->qty * $cartItem->price);
         }, 0);
 
         return $this->numberFormat($subTotal, $decimals, $decimalPoint, $thousandSeperator);
