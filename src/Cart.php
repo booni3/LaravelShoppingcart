@@ -284,6 +284,16 @@ class Cart
         return $content->sum('qty');
     }
 
+    public function weight()
+    {
+        $weight = 0;
+        $content = $this->getContent();
+
+        foreach ($content as $row) {
+            dd($row);
+        }
+    }
+
     /**
      * Get the Number of Product Lines in the Cart
      * excluding shipping and Discounts
@@ -350,6 +360,8 @@ class Cart
     public function subtotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
         $content = $this->getContent();
+
+        // Find any discountable items and apply the value where appropriate.
 
         $subTotal = $content->reduce(function ($subTotal, CartItem $cartItem) {
             return $subTotal + ($cartItem->qty * $cartItem->price);
@@ -567,7 +579,7 @@ class Cart
     }
 
     /**
-     * Create a new ShippingItem from the supplied attributes.
+     * Create a new DiscountItem from the supplied attributes.
      *
      * @param mixed     $id
      * @param mixed     $name
