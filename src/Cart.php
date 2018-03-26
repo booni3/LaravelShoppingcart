@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Session\SessionManager;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Contracts\Events\Dispatcher;
+use PhpUnitsOfMeasure\PhysicalQuantity\Mass;
 use Ollywarren\ShoppingCart\Contracts\Buyable;
 use Ollywarren\ShoppingCart\Contracts\Shippable;
 use Ollywarren\ShoppingCart\Exceptions\UnknownModelException;
@@ -284,6 +285,11 @@ class Cart
         return $content->sum('qty');
     }
 
+    /**
+     * Looks up any weights in the product options
+     *
+     * @return void
+     */
     public function weight()
     {
         $weightSplit = [
@@ -296,18 +302,24 @@ class Cart
         foreach ($content as $row) {
             if ($row->options->weight) {
                 if ($row->options->unit == 'Metric') {
-                    $weight['metric']  = $weight['metric'] + $row->options->weight;
+                    $weightSplit['metric']  = $weightSplit['metric'] + $row->options->weight;
                 } else {
-                    $weight['imperial']  = $weight['imperial'] + $row->options->weight;
+                    $weightSplit['imperial']  = $weightSplit['imperial'] + $row->options->weight;
                 }
             }
         }
 
         // Convert the two types inot a total of each Type
-        $imperialToMetricTotal = '';
-        $metricToImperialTotal = '';
+        $imperialTotal      = new Mass($weightSplit['imperial'], 'pounds');
+        $metricTotal        = new Mass($weightSplit['metric'], 'kilograms');
 
-        
+        $imperialConversion = new Mass($imperialTotal->toUnit('kilograms'), 'kilograms');
+        $metricConversion   = new Mass($metricTotal->toUnit('pounds'), 'pounds');
+
+        $weight = [
+            'imperial'  => $imperialTotal->add($metricConversion)->toUnit('pounds'),
+            'metric'    => $metricTotal->add($imperialConversion)->toUnit('kilograms')
+        ];
 
         return collect($weight);
     }
