@@ -9,19 +9,19 @@ interface Shippable
      *
      * @return int|string
      */
-    public function getBuyableIdentifier();
+    public function getShippableIdentifier();
 
     /**
      * Get the description or title of the Buyable item.
      *
      * @return string
      */
-    public function getBuyableDescription();
+    public function getShippableDescription();
 
     /**
      * Get the price of the Buyable item.
      *
      * @return float
      */
-    public function getBuyablePrice();
+    public function getShippablePrice();
 }
