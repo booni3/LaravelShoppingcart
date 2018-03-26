@@ -13,6 +13,7 @@ use Ollywarren\ShoppingCart\Contracts\Shippable;
 use Ollywarren\ShoppingCart\Exceptions\UnknownModelException;
 use Ollywarren\ShoppingCart\Exceptions\InvalidRowIDException;
 use Ollywarren\ShoppingCart\Exceptions\CartAlreadyStoredException;
+use Ollywarren\ShoppingCart\Contracts\Discountable;
 
 class Cart
 {
@@ -374,8 +375,10 @@ class Cart
     {
         $content = $this->getContent();
 
-        $tax = $content->reduce(function ($tax, CartItem $cartItem) {
-            return $tax + ($cartItem->qty * $cartItem->tax);
+        $tax = $content->reduce(function ($tax, $cartItem) {
+            if (!$cartItem instanceof Discountable) {
+                return $tax + ($cartItem->qty * $cartItem->tax);
+            }
         }, 0);
 
         return $this->numberFormat($tax, $decimals, $decimalPoint, $thousandSeperator);
