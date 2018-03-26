@@ -410,6 +410,27 @@ class Cart
     }
 
     /**
+     * Get the subtotal (total - tax) of the items in the cart, exlcuing any shipping Items
+     *
+     * @param int    $decimals
+     * @param string $decimalPoint
+     * @param string $thousandSeperator
+     * @return float
+     */
+    public function subtotalExcShipping($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    {
+        $content = $this->getContent();
+
+        $subTotal = $content->reduce(function ($subTotal, $cartItem) {
+            if ($cartItem instanceof CartItem) {
+                return $subTotal + ($cartItem->qty * $cartItem->price);
+            }
+        }, 0);
+
+        return $this->numberFormat($subTotal, $decimals, $decimalPoint, $thousandSeperator);
+    }
+
+    /**
      * Search the cart content for a cart item matching the given search closure.
      *
      * @param \Closure $search
