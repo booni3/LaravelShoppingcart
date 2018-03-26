@@ -356,8 +356,10 @@ class Cart
     {
         $content = $this->getContent();
 
-        $total = $content->reduce(function ($total, CartItem $cartItem) {
-            return $total + ($cartItem->qty * $cartItem->priceTax);
+        $total = $content->reduce(function ($total, $cartItem) {
+            if (!$cartItem instanceof Discountable) {
+                return $total + ($cartItem->qty * $cartItem->priceTax);
+            }
         }, 0);
 
         return $this->numberFormat($total, $decimals, $decimalPoint, $thousandSeperator);
