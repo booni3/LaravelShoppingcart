@@ -302,9 +302,9 @@ class Cart
         foreach ($content as $row) {
             if ($row->options->weight) {
                 if ($row->options->unit == 'Metric') {
-                    $weightSplit['metric']  = $weightSplit['metric'] + $row->options->weight;
+                    $weightSplit['metric']  = $weightSplit['metric'] + ($row->options->weight * $row->qty);
                 } else {
-                    $weightSplit['imperial']  = $weightSplit['imperial'] + $row->options->weight;
+                    $weightSplit['imperial']  = $weightSplit['imperial'] + ($row->options->weight * $row->qty);
                 }
             }
         }
