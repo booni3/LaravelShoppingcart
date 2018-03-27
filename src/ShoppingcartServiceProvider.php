@@ -1,6 +1,6 @@
 <?php
 
-namespace Ollywarren\Shoppingcart;
+namespace Ollywarren\ShoppingCart;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Session\SessionManager;
