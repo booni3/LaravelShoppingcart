@@ -43,6 +43,13 @@ class DiscountItem implements Arrayable, Jsonable
      */
     public $qty;
 
+    /**
+     * The FQN of the associated model.
+     *
+     * @var string|null
+     */
+    private $associatedModel = null;
+
 
     /**
      * DiscountItem constructor.
@@ -185,6 +192,19 @@ class DiscountItem implements Arrayable, Jsonable
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);
+    }
+
+    /**
+     * Associate the discount item with the given model.
+     *
+     * @param mixed $model
+     * @return \Ollywarren\ShoppingCart\DiscountItem
+     */
+    public function associate($model)
+    {
+        $this->associatedModel = is_string($model) ? $model : get_class($model);
+        
+        return $this;
     }
 
     /**
