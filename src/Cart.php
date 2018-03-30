@@ -154,11 +154,15 @@ class Cart
      * @param float     $value
      * @return  \Ollywarren\ShoppingCart\ShippingItem
      */
-    public function discount($id, $name = null, $value = null)
+    public function discount($id, $name = null, $qty = null, $price = null)
     {
-        $discountItem = $this->createDiscountItem($id, $name, $value);
+        $discountItem = $this->createDiscountItem($id, $name, $qty, $price);
 
         $content = $this->getContent();
+
+        if ($content->has($discountItem->rowId)) {
+            $discountItem->qty += $content->get($discountItem->rowId)->qty;
+        }
 
         $content->put($discountItem->rowId, $discountItem);
 
@@ -184,6 +188,8 @@ class Cart
             $cartItem->updateFromBuyable($qty);
         } elseif ($qty instanceof Shippable) {
             $cartItem->updateFromShippable($qty);
+        } elseif ($qty instanceof Discountable) {
+            $cartItem->updateFromDiscountable($qty);
         } elseif (is_array($qty)) {
             $cartItem->updateFromArray($qty);
         } else {
@@ -650,16 +656,18 @@ class Cart
      * @param float     $value
      * @return \Ollywarren\ShoppingCart\DiscountItem
      */
-    private function createDiscountItem($id, $name, $value)
+    private function createDiscountItem($id, $name, $qty, $price)
     {
         if ($id instanceof Discountable) {
-            $discountItem = DiscountItem::fromDiscountable($id);
+            $discountItem = DiscountItem::fromDiscountable($id, $qty ?: []);
             $discountItem->setQuantity($name ?: 1);
             $discountItem->associate($id);
         } elseif (is_array($id)) {
             $discountItem = DiscountItem::fromArray($id);
+            $discountItem->setQuantity($id['qty']);
         } else {
             $discountItem = DiscountItem::fromAttributes($id, $name, $value);
+            $discountItem->setQuantity($qty);
         }
         return $discountItem;
     }

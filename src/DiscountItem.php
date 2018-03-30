@@ -184,6 +184,7 @@ class DiscountItem implements Arrayable, Jsonable
             'id'       => $this->id,
             'name'     => $this->name,
             'value'    => $this->value,
+            'qty'      => $this->qty
         ];
     }
 
