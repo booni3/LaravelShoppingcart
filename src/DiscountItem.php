@@ -36,6 +36,13 @@ class DiscountItem implements Arrayable, Jsonable
      */
     public $value;
 
+    /**
+     * Defines the Number of Discountable Items
+     *
+     * @var int
+     */
+    public $qty;
+
 
     /**
      * DiscountItem constructor.
@@ -138,6 +145,20 @@ class DiscountItem implements Arrayable, Jsonable
     protected function generateRowId($id, $name, $value)
     {
         return md5($id . $name . $value);
+    }
+
+    /**
+     * Set the quantity for this discount item.
+     *
+     * @param int|float $qty
+     */
+    public function setQuantity($qty)
+    {
+        if (empty($qty) || ! is_numeric($qty)) {
+            throw new \InvalidArgumentException('Please supply a valid quantity.');
+        }
+
+        $this->qty = $qty;
     }
 
     /**
