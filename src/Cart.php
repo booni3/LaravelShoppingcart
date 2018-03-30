@@ -652,7 +652,11 @@ class Cart
      */
     private function createDiscountItem($id, $name, $value)
     {
-        if (is_array($id)) {
+        if ($id instanceof Discountable) {
+            $discountItem = DiscountItem::fromDiscountable($id);
+            $discountItem->setQuantity($name ?: 1);
+            $discountItem->associate($id);
+        } elseif (is_array($id)) {
             $discountItem = DiscountItem::fromArray($id);
         } else {
             $discountItem = DiscountItem::fromAttributes($id, $name, $value);
