@@ -661,6 +661,39 @@ class Cart
     }
 
     /**
+     * Detects if a coupon is already applied to the cart and returns it,
+     * otherwise it returns false;
+     *
+     * @return mixed
+     */
+    public function hasDiscountItem()
+    {
+        // Get the cart items
+        $items = $this->getContent();
+
+        // If theres nothing in the cart retrun false
+        // Otherwise filter the items for only DiscountItems
+        if ($items->count() > 0) {
+            $filter = $items->filter(function ($value, $key) {
+                return $value instanceof DiscountItem;
+            })->all();
+            
+            // Re-collect the output array
+            $filter = collect($filter);
+
+            // If theres discount items return them
+            if ($filter->count() > 0) {
+                return $filter;
+            }
+
+            //otherwise return false;
+            return false;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if the item is a multidimensional array or an array of Buyables.
      *
      * @param mixed $item
