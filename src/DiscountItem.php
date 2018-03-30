@@ -102,6 +102,10 @@ class DiscountItem implements Arrayable, Jsonable
             return $this->{$attribute};
         }
 
+        if ($attribute === 'model' && isset($this->associatedModel)) {
+            return with(new $this->associatedModel)->find($this->id);
+        }
+
         return null;
     }
 
