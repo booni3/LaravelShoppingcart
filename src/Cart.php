@@ -770,28 +770,6 @@ class Cart
         return false;
     }
 
-    public function applyShippingDiscount()
-    {
-        // Find the Shipping Item if exists
-        // Set the price to original price less disocunt amount
-        // update the cart
-    }
-
-    public function applyDiscounts()
-    {
-        $items = $this->getContent();
-        
-        $filtered = $items->filter(function ($value, $key) {
-            return $value instanceof DiscountItem;
-        })->all();
-
-        $discounts = collect($filtered);
-
-        foreach($discounts as $discount) {
-            if($discount->model->type == '')
-        }
-    }
-
     /**
      * Check if the item is a multidimensional array or an array of Buyables.
      *
