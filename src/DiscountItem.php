@@ -51,13 +51,21 @@ class DiscountItem implements Arrayable, Jsonable
     private $associatedModel = null;
 
     /**
+     * Defines the Type of Discount,
+     * Monetary Vlaue or Percentage
+     *
+     * @var string
+     */
+    private $type;
+
+    /**
      * DiscountItem constructor.
      *
      * @param int|string $id
      * @param string     $name
      * @param float      $value
      */
-    public function __construct($id, $name, $value)
+    public function __construct($id, $name, $value, $type)
     {
         if (empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -68,11 +76,15 @@ class DiscountItem implements Arrayable, Jsonable
         if (strlen($value) < 0 || ! is_numeric($value)) {
             throw new \InvalidArgumentException('Please supply a valid value.');
         }
+        if (empty($type) || !in_array($type, ['monetary', 'percent'])) {
+            throw new \InvalidArgumentException('Please supply a valid discount type, monetary or percent.');
+        }
 
         $this->id       = $id;
         $this->name     = $name;
+        $this->type     = $type;
         $this->value    = floatval($value);
-        $this->rowId    = $this->generateRowId($id, $name, $value);
+        $this->rowId    = $this->generateRowId($id, $name, $value, $type);
     }
 
     /**
@@ -83,10 +95,11 @@ class DiscountItem implements Arrayable, Jsonable
      */
     public function updateFromArray(array $attributes)
     {
-        $this->id       = array_get($attributes, 'id', $this->id);
-        $this->name     = array_get($attributes, 'name', $this->name);
-        $this->value    = array_get($attributes, 'value', $this->value);
-        $this->rowId    = $this->generateRowId($this->id, $this->options->all());
+        $this->id               = array_get($attributes, 'id', $this->id);
+        $this->name             = array_get($attributes, 'name', $this->name);
+        $this->value            = array_get($attributes, 'value', $this->value);
+        $this->type             = array_get($attributes, 'type', $this->type);
+        $this->rowId            = $this->generateRowId($this->id, $this->options->all());
     }
 
     /**
@@ -117,7 +130,7 @@ class DiscountItem implements Arrayable, Jsonable
      */
     public static function fromDiscountable(Discountable $item, array $options = [])
     {
-        return new self($item->getDiscountableIdentifier($options), $item->getDiscountableDescription($options), $item->getDiscountableValue($options), $options);
+        return new self($item->getDiscountableIdentifier($options), $item->getDiscountableDescription($options), $item->getDiscountableValue($options), $item->getDiscountableType($options), $options);
     }
 
     /**
@@ -128,7 +141,7 @@ class DiscountItem implements Arrayable, Jsonable
      */
     public static function fromArray(array $attributes)
     {
-        return new self($attributes['id'], $attributes['name'], $attributes['value']);
+        return new self($attributes['id'], $attributes['name'], $attributes['value'], $attributes['type']);
     }
 
     /**
@@ -140,9 +153,9 @@ class DiscountItem implements Arrayable, Jsonable
      * @param array      $options
      * @return \Gloudemans\Shoppingcart\DiscountItem
      */
-    public static function fromAttributes($id, $name, $value)
+    public static function fromAttributes($id, $name, $value, $type)
     {
-        return new self($id, $name, $value);
+        return new self($id, $name, $value, $type);
     }
 
     /**
@@ -152,9 +165,9 @@ class DiscountItem implements Arrayable, Jsonable
      * @param array  $options
      * @return string
      */
-    protected function generateRowId($id, $name, $value)
+    protected function generateRowId($id, $name, $value, $type)
     {
-        return md5($id . $name . $value);
+        return md5($id . $name . $value . $type);
     }
 
     /**
@@ -183,7 +196,8 @@ class DiscountItem implements Arrayable, Jsonable
             'id'       => $this->id,
             'name'     => $this->name,
             'value'    => $this->value,
-            'qty'      => $this->qty
+            'qty'      => $this->qty,
+            'type'     => $this->type
         ];
     }
 

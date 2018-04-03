@@ -24,4 +24,11 @@ interface Discountable
      * @return float
      */
     public function getDiscountableValue();
+
+    /**
+     * Get the price of the Buyable item.
+     *
+     * @return float
+     */
+    public function getDiscountableType();
 }

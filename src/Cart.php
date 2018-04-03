@@ -42,6 +42,34 @@ class Cart
     private $instance;
 
     /**
+     * Discount Monetary Values
+     *
+     * @var int
+     */
+    private $discountMonetaryValue;
+
+    /**
+     * Disocunt Percentage Value
+     *
+     * @var int
+     */
+    private $discountPercentageValue;
+
+    /**
+     * Does the Cart have Free Shipping Applied
+     *
+     * @var boolean
+     */
+    private $freeShipping = false;
+
+    /**
+     * Value of Any Shipping Discount Applied.
+     *
+     * @var int
+     */
+    private $shippingDiscount;
+
+    /**
      * Cart constructor.
      *
      * @param \Illuminate\Session\SessionManager      $session
@@ -51,6 +79,12 @@ class Cart
     {
         $this->session = $session;
         $this->events = $events;
+
+        // Set Inital Discount States
+        $this->discountMonetaryValue    = 0;
+        $this->discountPercentageValue  = 0;
+        $this->shippingDiscount         = 0;
+        $this->freeShipping             = false;
 
         $this->instance(self::DEFAULT_INSTANCE);
     }
@@ -154,9 +188,9 @@ class Cart
      * @param float     $value
      * @return  \Ollywarren\ShoppingCart\ShippingItem
      */
-    public function discount($id, $name = null, $qty = null, $price = null)
+    public function discount($id, $name = null, $qty = null, $value = null, $type = null)
     {
-        $discountItem = $this->createDiscountItem($id, $name, $qty, $price);
+        $discountItem = $this->createDiscountItem($id, $name, $qty, $value, $type);
 
         $content = $this->getContent();
 
@@ -169,6 +203,12 @@ class Cart
         $this->events->fire('discount.added', $discountItem);
 
         $this->session->put($this->instance, $content);
+
+        if ($type == 'monetary') {
+            $this->discountMonetaryValue = $this->discountMonetaryValue + $value;
+        } elseif ($type == 'percent') {
+            $this->discountPercentValue = $this->discountPercentValue + $value;
+        }
 
         return $discountItem;
     }
@@ -365,6 +405,8 @@ class Cart
     {
         $content = $this->getContent();
 
+        // Apply Discounts
+
         $total = $content->reduce(function ($total, $cartItem) {
             if ($cartItem instanceof Discountable) {
                 return $total + ($cartItem->qty * $cartItem->priceTax);
@@ -373,6 +415,8 @@ class Cart
 
         return $this->numberFormat($total, $decimals, $decimalPoint, $thousandSeperator);
     }
+
+
 
     /**
      * Get the total tax of the items in the cart.
@@ -656,7 +700,7 @@ class Cart
      * @param float     $value
      * @return \Ollywarren\ShoppingCart\DiscountItem
      */
-    private function createDiscountItem($id, $name, $qty, $price)
+    private function createDiscountItem($id, $name, $qty, $price, $type)
     {
         if ($id instanceof Discountable) {
             $discountItem = DiscountItem::fromDiscountable($id, $qty ?: []);
@@ -666,7 +710,7 @@ class Cart
             $discountItem = DiscountItem::fromArray($id);
             $discountItem->setQuantity($id['qty']);
         } else {
-            $discountItem = DiscountItem::fromAttributes($id, $name, $value);
+            $discountItem = DiscountItem::fromAttributes($id, $name, $value, $type);
             $discountItem->setQuantity($qty);
         }
         return $discountItem;
@@ -731,6 +775,21 @@ class Cart
         // Find the Shipping Item if exists
         // Set the price to original price less disocunt amount
         // update the cart
+    }
+
+    public function applyDiscounts()
+    {
+        $items = $this->getContent();
+        
+        $filtered = $items->filter(function ($value, $key) {
+            return $value instanceof DiscountItem;
+        })->all();
+
+        $discounts = collect($filtered);
+
+        foreach($discounts as $discount) {
+            if($discount->model->type == '')
+        }
     }
 
     /**
