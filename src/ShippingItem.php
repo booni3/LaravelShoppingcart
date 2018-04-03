@@ -60,6 +60,20 @@ class ShippingItem implements Arrayable, Jsonable
     private $taxRate = 0;
 
     /**
+     * Defines if this Item Should be Free Shipping
+     *
+     * @var boolean
+     */
+    private $isFreeShipping  = false;
+
+    /**
+     * Defines the discount value off the shippign Item is Applicable
+     *
+     * @var boolean
+     */
+    private $shippingDiscount;
+
+    /**
      * CartItem constructor.
      *
      * @param int|string $id
@@ -79,11 +93,13 @@ class ShippingItem implements Arrayable, Jsonable
             throw new \InvalidArgumentException('Please supply a valid price.');
         }
 
-        $this->id       = $id;
-        $this->name     = $name;
-        $this->qty      = 1;
-        $this->price    = floatval($price);
-        $this->rowId    = $this->generateRowId($id, $name, $price);
+        $this->id               = $id;
+        $this->name             = $name;
+        $this->qty              = 1;
+        $this->rowId            = $this->generateRowId($id, $name, $price);
+        $this->isFreeShipping   = false;
+        $this->shippingDiscount = 0;
+        $this->price            = floatval($price);
     }
 
     /**
@@ -96,6 +112,11 @@ class ShippingItem implements Arrayable, Jsonable
      */
     public function price($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
+        if ($this->shippingDiscount && !$this->isFreeShipping) {
+            $this->price = $this->price - $this->shippingDiscount;
+        } elseif ($this->isFreeShipping) {
+            $this->price = 0.00;
+        }
         return $this->numberFormat($this->price, $decimals, $decimalPoint, $thousandSeperator);
     }
     
@@ -128,7 +149,7 @@ class ShippingItem implements Arrayable, Jsonable
     
     /**
      * Returns the formatted total.
-     * Total is price for whole CartItem with TAX
+     * Total is price for whole ShippingItem with TAX
      *
      * @param int    $decimals
      * @param string $decimalPoint
@@ -332,13 +353,15 @@ class ShippingItem implements Arrayable, Jsonable
     public function toArray()
     {
         return [
-            'rowId'    => $this->rowId,
-            'id'       => $this->id,
-            'name'     => $this->name,
-            'qty'      => $this->qty,
-            'price'    => $this->price,
-            'tax'      => $this->tax,
-            'subtotal' => $this->subtotal
+            'rowId'             => $this->rowId,
+            'id'                => $this->id,
+            'name'              => $this->name,
+            'qty'               => $this->qty,
+            'price'             => $this->price,
+            'tax'               => $this->tax,
+            'subtotal'          => $this->subtotal,
+            'freeShipping'      => $this->isFreeShipping,
+            'shippingDiscount'  => $this->shippingDiscount
         ];
     }
 

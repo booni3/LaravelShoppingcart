@@ -50,7 +50,6 @@ class DiscountItem implements Arrayable, Jsonable
      */
     private $associatedModel = null;
 
-
     /**
      * DiscountItem constructor.
      *
@@ -87,7 +86,7 @@ class DiscountItem implements Arrayable, Jsonable
         $this->id       = array_get($attributes, 'id', $this->id);
         $this->name     = array_get($attributes, 'name', $this->name);
         $this->value    = array_get($attributes, 'value', $this->value);
-        $this->rowId = $this->generateRowId($this->id, $this->options->all());
+        $this->rowId    = $this->generateRowId($this->id, $this->options->all());
     }
 
     /**

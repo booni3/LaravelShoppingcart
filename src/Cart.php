@@ -366,7 +366,7 @@ class Cart
         $content = $this->getContent();
 
         $total = $content->reduce(function ($total, $cartItem) {
-            if (!$cartItem instanceof Discountable) {
+            if ($cartItem instanceof Discountable) {
                 return $total + ($cartItem->qty * $cartItem->priceTax);
             }
         }, 0);
@@ -703,6 +703,34 @@ class Cart
         }
 
         return false;
+    }
+
+    /**
+     * Updates the Cart to Apply Free Shipping.
+     *
+     * @return void
+     */
+    public function applyFreeShipping()
+    {
+        $items = Cart::instance('basket')->content();
+
+        $shipping = $items->filter(function ($value, $key) {
+            return $value instanceof ShippingItem;
+        });
+
+        if ($shipping->first() !== null) {
+            $this->update($shipping->first()->rowID, ['price' => 0.00]);
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function applyShippingDiscount()
+    {
+        // Find the Shipping Item if exists
+        // Set the price to original price less disocunt amount
+        // update the cart
     }
 
     /**
