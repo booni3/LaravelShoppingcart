@@ -405,10 +405,8 @@ class Cart
     {
         $content = $this->getContent();
 
-        // Apply Discounts
-
         $total = $content->reduce(function ($total, $cartItem) {
-            if ($cartItem instanceof Discountable) {
+            if (!$cartItem instanceof Discountable) {
                 return $total + ($cartItem->qty * $cartItem->priceTax);
             }
         }, 0);
