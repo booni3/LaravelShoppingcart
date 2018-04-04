@@ -691,6 +691,39 @@ class Cart
     }
 
     /**
+     * Detects if a Shipping Item is Applied
+     * otherwise it returns false;
+     *
+     * @return mixed
+     */
+    public function hasShippingItem()
+    {
+        // Get the cart items
+        $items = $this->getContent();
+
+        // If theres nothing in the cart retrun false
+        // Otherwise filter the items for only DiscountItems
+        if ($items->count() > 0) {
+            $filter = $items->filter(function ($value, $key) {
+                return $value instanceof ShippingItem;
+            })->all();
+            
+            // Re-collect the output array
+            $filter = collect($filter);
+
+            // If theres shipping items return them
+            if ($filter->count() > 0) {
+                return $filter;
+            }
+
+            //otherwise return false;
+            return false;
+        }
+
+        return false;
+    }
+
+    /**
      * Create a new DiscountItem from the supplied attributes.
      *
      * @param mixed     $id
