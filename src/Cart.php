@@ -438,6 +438,30 @@ class Cart
     }
 
     /**
+     * Get the total tax of the items in the cart.
+     *
+     * @param int    $decimals
+     * @param string $decimalPoint
+     * @param string $thousandSeperator
+     * @return float
+     */
+    public function taxExcShipping($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    {
+        $content = $this->getContent();
+        $filtered = $content->filter(function ($value, $key) {
+            return $value instanceof CartItem;
+        });
+
+        $content = collect($filtered->all());
+
+        $tax = $content->reduce(function ($tax, $cartItem) {
+            return $tax + ($cartItem->qty * $cartItem->tax);
+        }, 0);
+
+        return $this->numberFormat($subTotal, $decimals, $decimalPoint, $thousandSeperator);
+    }
+
+    /**
      * Get the subtotal (total - tax) of the items in the cart.
      *
      * @param int    $decimals
