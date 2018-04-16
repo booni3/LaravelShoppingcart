@@ -414,6 +414,30 @@ class Cart
         return $this->numberFormat($total, $decimals, $decimalPoint, $thousandSeperator);
     }
 
+    /**
+     * Get the total of the items in the cart, exlcuing any shipping Items
+     *
+     * @param int    $decimals
+     * @param string $decimalPoint
+     * @param string $thousandSeperator
+     * @return float
+     */
+    public function totalExcShipping($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    {
+        $content = $this->getContent();
+        $filtered = $content->filter(function ($value, $key) {
+            return $value instanceof CartItem;
+        });
+
+        $content = collect($filtered->all());
+
+        $total = $content->reduce(function ($total, $cartItem) {
+            return $total + ($cartItem->qty * $cartItem->priceTax);
+        }, 0);
+
+        return $this->numberFormat($total, $decimals, $decimalPoint, $thousandSeperator);
+    }
+
 
 
     /**
