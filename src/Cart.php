@@ -308,6 +308,23 @@ class Cart
     }
 
     /**
+     * Method to Remove whats in the Database as a Stored Instance.
+     *
+     * @return void
+     */
+    public function storeDestroy($identifier)
+    {
+        if (! $this->storedCartWithIdentifierExists($identifier)) {
+            return;
+        }
+
+        $this->getConnection()->table($this->getTableName())
+            ->where('identifier', $identifier)->delete();
+
+        $this->events->fire('cart.store-destroyed');
+    }
+
+    /**
      * Get the content of the cart.
      *
      * @return \Illuminate\Support\Collection
