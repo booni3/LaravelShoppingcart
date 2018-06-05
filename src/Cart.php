@@ -317,18 +317,13 @@ class Cart
         if (! $this->storedCartWithIdentifierExists($identifier)) {
             return;
         }
-
-        if ($this->instance) {
-            $this->getConnection()->table($this->getTableName())
-            ->where([
-                'identifier' => $identifier,
-                'instance'   => $this->instance
-            ])->delete();
-        } else {
-            $this->getConnection()->table($this->getTableName())
-            ->where('identifier', $identifier)->delete();
-        }
-
+     
+        $this->getConnection()->table($this->getTableName())
+        ->where([
+            'identifier' => $identifier,
+            'instance'   => $this->currentInstance()
+        ])->delete();
+     
         $this->events->fire('cart.store-destroyed');
     }
 
