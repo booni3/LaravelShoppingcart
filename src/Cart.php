@@ -318,8 +318,16 @@ class Cart
             return;
         }
 
-        $this->getConnection()->table($this->getTableName())
+        if ($this->instance) {
+            $this->getConnection()->table($this->getTableName())
+            ->where([
+                'identifier' => $identifier,
+                'instance'   => $this->instance
+            ])->delete();
+        } else {
+            $this->getConnection()->table($this->getTableName())
             ->where('identifier', $identifier)->delete();
+        }
 
         $this->events->fire('cart.store-destroyed');
     }
