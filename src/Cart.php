@@ -631,6 +631,23 @@ class Cart
     }
 
     /**
+     * Syncs the Stored Cart with the Database.
+     *
+     * @return void
+     */
+    public function syncdb($identifier)
+    {
+        // Delete any Stored Instances
+        $this->getConnection()->table($this->getTableName())
+        ->where([
+            'identifier' => $identifier,
+            'instance'   => $this->currentInstance()
+        ])->delete();
+
+        $this->store($identifier);
+    }
+
+    /**
      * Restore the cart with the given identifier.
      *
      * @param mixed $identifier
