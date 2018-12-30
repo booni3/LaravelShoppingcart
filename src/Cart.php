@@ -728,7 +728,7 @@ class Cart
      */
     public function getCartItems()
     {
-        return $this->cart->content()->filter(function($row){
+        return $this->content()->filter(function($row){
             return !$row instanceof ShippingItem;
         });
     }
