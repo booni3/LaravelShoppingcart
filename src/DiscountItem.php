@@ -151,7 +151,7 @@ class DiscountItem implements Arrayable, Jsonable
      * @param string     $name
      * @param float      $price
      * @param array      $options
-     * @return \Gloudemans\Shoppingcart\DiscountItem
+     * @return \Booni3\Shoppingcart\DiscountItem
      */
     public static function fromAttributes($id, $name, $value, $type)
     {

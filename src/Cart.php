@@ -93,7 +93,7 @@ class Cart
      * Set the current cart instance.
      *
      * @param string|null $instance
-     * @return \Gloudemans\Shoppingcart\Cart
+     * @return \Booni3\Shoppingcart\Cart
      */
     public function instance($instance = null)
     {
@@ -122,7 +122,7 @@ class Cart
      * @param int|float $qty
      * @param float     $price
      * @param array     $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return \Booni3\Shoppingcart\CartItem
      */
     public function add($id, $name = null, $qty = null, $price = null, array $options = [])
     {
@@ -218,7 +218,7 @@ class Cart
      *
      * @param string $rowId
      * @param mixed  $qty
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return \Booni3\Shoppingcart\CartItem
      */
     public function update($rowId, $qty)
     {
@@ -284,7 +284,7 @@ class Cart
      * Get a cart item from the cart by its rowId.
      *
      * @param string $rowId
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return \Booni3\Shoppingcart\CartItem
      */
     public function get($rowId)
     {
@@ -729,7 +729,7 @@ class Cart
      * @param int|float $qty
      * @param float     $price
      * @param array     $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return \Booni3\Shoppingcart\CartItem
      */
     private function createCartItem($id, $name, $qty, $price, array $options)
     {

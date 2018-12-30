@@ -248,7 +248,7 @@ class ShippingItem implements Arrayable, Jsonable
      * Set the tax rate.
      *
      * @param int|float $taxRate
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return \Booni3\Shoppingcart\CartItem
      */
     public function setTaxRate($taxRate)
     {
@@ -326,7 +326,7 @@ class ShippingItem implements Arrayable, Jsonable
      * @param string     $name
      * @param float      $price
      * @param array      $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return \Booni3\Shoppingcart\CartItem
      */
     public static function fromAttributes($id, $name, $price)
     {

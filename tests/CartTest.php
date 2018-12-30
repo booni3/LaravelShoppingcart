@@ -934,7 +934,7 @@ class CartTest extends TestCase
     /**
      * Get an instance of the cart.
      *
-     * @return \Gloudemans\Shoppingcart\Cart
+     * @return \Booni3\Shoppingcart\Cart
      */
     private function getCart()
     {
