@@ -1,9 +1,9 @@
 <?php
 
-namespace Ollywarren\ShoppingCart;
+namespace Booni3\ShoppingCart;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Ollywarren\ShoppingCart\Contracts\Buyable;
+use Booni3\ShoppingCart\Contracts\Buyable;
 use Illuminate\Contracts\Support\Jsonable;
 
 class CartItem implements Arrayable, Jsonable

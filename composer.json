@@ -1,5 +1,5 @@
 {
-    "name": "ollywarren/shoppingcart",
+    "name": "booni3/shoppingcart",
     "description": "Laravel 5.5+ Shopping Cart Package based on the Original Rob Gloudemans Package",
     "keywords": ["laravel", "shoppingcart", "shipping", "discount codes"],
     "license": "MIT",
@@ -26,22 +26,22 @@
     },
     "autoload": {
         "psr-4": {
-            "Ollywarren\\ShoppingCart\\": "src/"
+            "Booni3\\ShoppingCart\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ollywarren\\Tests\\ShoppingCart\\": "tests/"
+            "Booni3\\Tests\\ShoppingCart\\": "tests/"
         }
     },
     "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
-                "Ollywarren\\ShoppingCart\\ShoppingCartServiceProvider"
+                "Booni3\\ShoppingCart\\ShoppingCartServiceProvider"
             ],
             "aliases": {
-                "Cart": "Ollywarren\\ShoppingCart\\Facades\\Cart"
+                "Cart": "Booni3\\ShoppingCart\\Facades\\Cart"
             }
         }
     }

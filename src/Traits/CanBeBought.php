@@ -1,6 +1,6 @@
 <?php
 
-namespace Ollywarren\ShoppingCart\Traits;
+namespace Booni3\ShoppingCart\Traits;
 
 trait CanBeBought
 {

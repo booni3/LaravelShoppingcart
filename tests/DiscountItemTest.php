@@ -1,10 +1,10 @@
 <?php
 
-namespace Ollywarren\Tests\ShoppingCart;
+namespace Booni3\Tests\ShoppingCart;
 
 use Orchestra\Testbench\TestCase;
-use Ollywarren\ShoppingCart\DiscountItem;
-use Ollywarren\ShoppingCart\ShoppingCartServiceProvider;
+use Booni3\ShoppingCart\DiscountItem;
+use Booni3\ShoppingCart\ShoppingCartServiceProvider;
 
 class DiscountItemTest extends TestCase
 {

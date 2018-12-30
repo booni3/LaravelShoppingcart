@@ -1,8 +1,8 @@
 <?php
 
-namespace Ollywarren\Tests\ShoppingCart\Fixtures;
+namespace Booni3\Tests\ShoppingCart\Fixtures;
 
-use Ollywarren\ShoppingCart\Contracts\Discountable;
+use Booni3\ShoppingCart\Contracts\Discountable;
 
 class DiscountObject implements Discountable
 {

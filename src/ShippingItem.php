@@ -1,9 +1,9 @@
 <?php
 
-namespace Ollywarren\ShoppingCart;
+namespace Booni3\ShoppingCart;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Ollywarren\ShoppingCart\Contracts\Shippable;
+use Booni3\ShoppingCart\Contracts\Shippable;
 use Illuminate\Contracts\Support\Jsonable;
 
 class ShippingItem implements Arrayable, Jsonable
@@ -204,7 +204,7 @@ class ShippingItem implements Arrayable, Jsonable
     /**
      * Update the cart item from a Shippable.
      *
-     * @param \Ollywarren\ShoppingCart\Contracts\Shippable $item
+     * @param \Booni3\ShoppingCart\Contracts\Shippable $item
      * @return void
      */
     public function updateFromShippable(Shippable $item)
@@ -235,7 +235,7 @@ class ShippingItem implements Arrayable, Jsonable
      * Associate the shipping item with the given model.
      *
      * @param mixed $model
-     * @return \Ollywarren\ShoppingCart\ShippingItem
+     * @return \Booni3\ShoppingCart\ShippingItem
      */
     public function associate($model)
     {
@@ -299,9 +299,9 @@ class ShippingItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Shippable.
      *
-     * @param \Ollywarren\ShoppingCart\Contracts\Shippable $item
+     * @param \Booni3\ShoppingCart\Contracts\Shippable $item
      * @param array                          $options
-     * @return \Ollywarren\ShoppingCart\ShippingItem
+     * @return \Booni3\ShoppingCart\ShippingItem
      */
     public static function fromShippable(Shippable $item)
     {
@@ -312,7 +312,7 @@ class ShippingItem implements Arrayable, Jsonable
      * Create a new instance from the given array.
      *
      * @param array $attributes
-     * @return \Ollywarren\ShoppingCart\ShippingItem
+     * @return \Booni3\ShoppingCart\ShippingItem
      */
     public static function fromArray(array $attributes)
     {

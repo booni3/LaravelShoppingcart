@@ -1,8 +1,8 @@
 <?php
 
-namespace Ollywarren\Tests\ShoppingCart\Fixtures;
+namespace Booni3\Tests\ShoppingCart\Fixtures;
 
-use Ollywarren\ShoppingCart\Contracts\Buyable;
+use Booni3\ShoppingCart\Contracts\Buyable;
 
 class BuyableProduct implements Buyable
 {

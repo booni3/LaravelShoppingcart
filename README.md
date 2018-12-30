@@ -16,11 +16,11 @@ Should you still be on version 5.4 of Laravel, the final steps for you are to ad
 
 Add a new line to the `providers` array:
 
-	Ollywarren\ShoppingCart\ShoppingCartServiceProvider::class
+	Booni3\ShoppingCart\ShoppingCartServiceProvider::class
 
 And optionally add a new line to the `aliases` array:
 
-	'Cart' => Ollywarren\ShoppingCart\Facades\Cart::class,
+	'Cart' => Booni3\ShoppingCart\Facades\Cart::class,
 
 Now you're ready to start using the Shopping Cart in your application.
 

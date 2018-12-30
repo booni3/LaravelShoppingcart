@@ -1,6 +1,6 @@
 <?php
 
-namespace Ollywarren\ShoppingCart;
+namespace Booni3\ShoppingCart;
 
 use Closure;
 use Illuminate\Support\Collection;
@@ -8,13 +8,13 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Contracts\Events\Dispatcher;
 use PhpUnitsOfMeasure\PhysicalQuantity\Mass;
-use Ollywarren\ShoppingCart\Contracts\Buyable;
-use Ollywarren\ShoppingCart\Contracts\Shippable;
-use Ollywarren\ShoppingCart\Exceptions\UnknownModelException;
-use Ollywarren\ShoppingCart\Exceptions\InvalidRowIDException;
-use Ollywarren\ShoppingCart\Exceptions\CartAlreadyStoredException;
-use Ollywarren\ShoppingCart\Contracts\Discountable;
-use Ollywarren\ShoppingCart\CartItem;
+use Booni3\ShoppingCart\Contracts\Buyable;
+use Booni3\ShoppingCart\Contracts\Shippable;
+use Booni3\ShoppingCart\Exceptions\UnknownModelException;
+use Booni3\ShoppingCart\Exceptions\InvalidRowIDException;
+use Booni3\ShoppingCart\Exceptions\CartAlreadyStoredException;
+use Booni3\ShoppingCart\Contracts\Discountable;
+use Booni3\ShoppingCart\CartItem;
 
 class Cart
 {
@@ -155,7 +155,7 @@ class Cart
      * @param mixed     $id
      * @param mixed     $name
      * @param float     $price
-     * @return  \Ollywarren\ShoppingCart\ShippingItem
+     * @return  \Booni3\ShoppingCart\ShippingItem
      */
     public function shipping($id, $name = null, $price = null)
     {
@@ -186,7 +186,7 @@ class Cart
      * @param mixed     $id
      * @param mixed     $name
      * @param float     $value
-     * @return  \Ollywarren\ShoppingCart\ShippingItem
+     * @return  \Booni3\ShoppingCart\ShippingItem
      */
     public function discount($id, $name = null, $qty = null, $value = null, $type = null)
     {
@@ -756,7 +756,7 @@ class Cart
      * @param mixed     $id
      * @param mixed     $name
      * @param float     $price
-     * @return \Ollywarren\ShoppingCart\ShippingItem
+     * @return \Booni3\ShoppingCart\ShippingItem
      */
     private function createShippingItem($id, $name, $price)
     {
@@ -814,7 +814,7 @@ class Cart
      * @param mixed     $id
      * @param mixed     $name
      * @param float     $value
-     * @return \Ollywarren\ShoppingCart\DiscountItem
+     * @return \Booni3\ShoppingCart\DiscountItem
      */
     private function createDiscountItem($id, $name, $qty, $price, $type)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ollywarren\ShoppingCart\Contracts;
+namespace Booni3\ShoppingCart\Contracts;
 
 interface Discountable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ollywarren\ShoppingCart;
+namespace Booni3\ShoppingCart;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Session\SessionManager;
@@ -16,7 +16,7 @@ class ShoppingCartServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('cart', 'Ollywarren\ShoppingCart\Cart');
+        $this->app->bind('cart', 'Booni3\ShoppingCart\Cart');
 
         $config = __DIR__ . '/../config/cart.php';
         $this->mergeConfigFrom($config, 'cart');

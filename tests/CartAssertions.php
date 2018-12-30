@@ -1,8 +1,8 @@
 <?php
 
-namespace Ollywarren\Tests\ShoppingCart;
+namespace Booni3\Tests\ShoppingCart;
 
-use Ollywarren\ShoppingCart\Cart;
+use Booni3\ShoppingCart\Cart;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 trait CartAssertions

@@ -1,21 +1,21 @@
 <?php
 
-namespace Ollywarren\Tests\ShoppingCart;
+namespace Booni3\Tests\ShoppingCart;
 
 use Mockery;
 use PHPUnit\Framework\Assert;
-use Ollywarren\ShoppingCart\Cart;
+use Booni3\ShoppingCart\Cart;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Collection;
-use Ollywarren\ShoppingCart\CartItem;
+use Booni3\ShoppingCart\CartItem;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Session\SessionManager;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Ollywarren\ShoppingCart\ShoppingCartServiceProvider;
-use Ollywarren\Tests\ShoppingCart\Fixtures\ProductModel;
-use Ollywarren\Tests\ShoppingCart\Fixtures\BuyableProduct;
-use Ollywarren\Tests\ShoppingCart\Fixtures\DiscountObject;
+use Booni3\ShoppingCart\ShoppingCartServiceProvider;
+use Booni3\Tests\ShoppingCart\Fixtures\ProductModel;
+use Booni3\Tests\ShoppingCart\Fixtures\BuyableProduct;
+use Booni3\Tests\ShoppingCart\Fixtures\DiscountObject;
 
 class CartTest extends TestCase
 {
@@ -355,7 +355,7 @@ class CartTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ollywarren\ShoppingCart\Exceptions\InvalidRowIDException
+     * @expectedException \Booni3\ShoppingCart\Exceptions\InvalidRowIDException
      */
     public function it_will_throw_an_exception_if_a_rowid_was_not_found()
     {
@@ -635,7 +635,7 @@ class CartTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ollywarren\ShoppingCart\Exceptions\UnknownModelException
+     * @expectedException \Booni3\ShoppingCart\Exceptions\UnknownModelException
      * @expectedExceptionMessage The supplied model SomeModel does not exist.
      */
     public function it_will_throw_an_exception_when_a_non_existing_model_is_being_associated()
@@ -830,7 +830,7 @@ class CartTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ollywarren\ShoppingCart\Exceptions\CartAlreadyStoredException
+     * @expectedException \Booni3\ShoppingCart\Exceptions\CartAlreadyStoredException
      * @expectedExceptionMessage A cart with identifier 123 was already stored.
      */
     public function it_will_throw_an_exception_when_a_cart_was_already_stored_using_the_specified_identifier()

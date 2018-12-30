@@ -1,10 +1,10 @@
 <?php
 
-namespace Ollywarren\ShoppingCart;
+namespace Booni3\ShoppingCart;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Ollywarren\ShoppingCart\Contracts\Discountable;
+use Booni3\ShoppingCart\Contracts\Discountable;
 
 class DiscountItem implements Arrayable, Jsonable
 {
@@ -124,9 +124,9 @@ class DiscountItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Discountable.
      *
-     * @param \Ollywarren\ShoppingCart\Contracts\Discountable $item
+     * @param \Booni3\ShoppingCart\Contracts\Discountable $item
      * @param array                                      $options
-     * @return \Ollywarren\ShoppingCart\DiscountItem
+     * @return \Booni3\ShoppingCart\DiscountItem
      */
     public static function fromDiscountable(Discountable $item, array $options = [])
     {
@@ -137,7 +137,7 @@ class DiscountItem implements Arrayable, Jsonable
      * Create a new instance from the given array.
      *
      * @param array $attributes
-     * @return \Ollywarren\ShoppingCart\DiscountItem
+     * @return \Booni3\ShoppingCart\DiscountItem
      */
     public static function fromArray(array $attributes)
     {
@@ -216,7 +216,7 @@ class DiscountItem implements Arrayable, Jsonable
      * Associate the discount item with the given model.
      *
      * @param mixed $model
-     * @return \Ollywarren\ShoppingCart\DiscountItem
+     * @return \Booni3\ShoppingCart\DiscountItem
      */
     public function associate($model)
     {

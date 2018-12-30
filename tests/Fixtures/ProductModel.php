@@ -1,6 +1,6 @@
 <?php
 
-namespace Ollywarren\Tests\ShoppingCart\Fixtures;
+namespace Booni3\Tests\ShoppingCart\Fixtures;
 
 class ProductModel
 {
