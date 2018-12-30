@@ -342,21 +342,28 @@ class Cart
     }
 
     /**
-     * Get the number of items in the cart.
+     * Get the number of items in the cart, excluding shipping.
      *
-     * @return int|float
+     * @return int
      */
     public function count()
     {
         $content = $this->getContent();
 
-        return $content->sum('qty');
+        $check = collect($content->filter(function ($value, $key) {
+            return $value instanceof CartItem;
+        })->all());
+
+        return (int) $check->sum('qty');
     }
 
     /**
      * Looks up any weights in the product options
      *
      * @return void
+     * @throws \PhpUnitsOfMeasure\Exception\NonNumericValue
+     * @throws \PhpUnitsOfMeasure\Exception\NonStringUnitName
+     * @throws \PhpUnitsOfMeasure\Exception\PhysicalQuantityMismatch
      */
     public function weight()
     {
