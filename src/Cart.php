@@ -488,6 +488,30 @@ class Cart
         return $this->numberFormat($tax, $decimals, $decimalPoint, $thousandSeperator, null, $showCurrency);
     }
 
+
+    /**
+     * Get the shipping cost on its own, excluding tax
+     *
+     * @param null $decimals
+     * @param null $decimalPoint
+     * @param null $thousandSeperator
+     * @param bool $showCurrency
+     * @return string
+     */
+    public function shippingOnly($decimals = null, $decimalPoint = null, $thousandSeperator = null, $showCurrency = true)
+    {
+        $content = $this->getContent();
+        $filtered = $content->filter(function ($value, $key) {
+            return $value instanceof ShippingItem;
+        });
+        $content = collect($filtered->all());
+        $shipping = $content->reduce(function ($shipping, $cartItem) {
+            return $shipping + ($cartItem->qty * $cartItem->price);
+        }, 0);
+
+        return $this->numberFormat($shipping, $decimals, $decimalPoint, $thousandSeperator, null, $showCurrency);
+    }
+
     /**
      * Get the total tax of the items in the cart.
      *
