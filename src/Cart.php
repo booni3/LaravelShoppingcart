@@ -726,7 +726,7 @@ class Cart
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function getCartItems()
+    public function getCartItems()
     {
         return $this->cart->content()->filter(function($row){
             return !$row instanceof ShippingItem;
