@@ -722,6 +722,18 @@ class Cart
     }
 
     /**
+     * Get carts content of car items only i.e. Exclude any shipping items.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function getCartItems()
+    {
+        return $this->cart->content()->filter(function($row){
+            return !$row instanceof ShippingItem;
+        });
+    }
+
+    /**
      * Create a new CartItem from the supplied attributes.
      *
      * @param mixed     $id
