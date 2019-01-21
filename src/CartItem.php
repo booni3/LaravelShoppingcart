@@ -103,7 +103,7 @@ class CartItem implements Arrayable, Jsonable
     {
         return $this->numberFormat($this->price, $decimals, $decimalPoint, $thousandSeperator);
     }
-    
+
     /**
      * Returns the formatted price with TAX.
      *
@@ -130,7 +130,7 @@ class CartItem implements Arrayable, Jsonable
     {
         return $this->numberFormat($this->subtotal, $decimals, $decimalPoint, $thousandSeperator);
     }
-    
+
     /**
      * Returns the formatted total.
      * Total is price for whole CartItem with TAX
@@ -157,7 +157,7 @@ class CartItem implements Arrayable, Jsonable
     {
         return $this->numberFormat($this->tax, $decimals, $decimalPoint, $thousandSeperator);
     }
-    
+
     /**
      * Returns the formatted tax.
      *
@@ -175,18 +175,19 @@ class CartItem implements Arrayable, Jsonable
      * @param string $availableAttributeName
      * @return int
      */
-    public function backOrderQty($availableAttributeName = 'available') : int
+    public function backOrderQty($availableQtyAttributeName = 'available')
     {
-        if(!isset($this->associatedModel)){
+
+        if(empty($this->model->id)){
             return null;
         }
 
-        if(!isset($this->associatedModel->{$availableAttributeName})){
+        if(!isset($this->model->{$availableQtyAttributeName})){
             throw new \InvalidArgumentException('Please supply a valid available qty attribute name for this model.');
         }
 
         $backorder = 0;
-        $calc = $this->qty - $this->associatedModel->{$availableAttributeName};
+        $calc = $this->qty - $this->model->{$availableQtyAttributeName};
         if($calc > 0) $backorder = $calc;
 
         return $backorder;
@@ -248,7 +249,7 @@ class CartItem implements Arrayable, Jsonable
     public function associate($model)
     {
         $this->associatedModel = is_string($model) ? $model : get_class($model);
-        
+
         return $this;
     }
 
@@ -261,7 +262,7 @@ class CartItem implements Arrayable, Jsonable
     public function setTaxRate($taxRate)
     {
         $this->taxRate = $taxRate;
-        
+
         return $this;
     }
 
@@ -280,11 +281,11 @@ class CartItem implements Arrayable, Jsonable
         if ($attribute === 'priceTax') {
             return $this->price + $this->tax;
         }
-        
+
         if ($attribute === 'subtotal') {
             return $this->qty * $this->price;
         }
-        
+
         if ($attribute === 'total') {
             return $this->qty * ($this->priceTax);
         }
@@ -292,9 +293,13 @@ class CartItem implements Arrayable, Jsonable
         if ($attribute === 'tax') {
             return $this->price * ($this->taxRate / 100);
         }
-        
+
         if ($attribute === 'taxTotal') {
             return $this->tax * $this->qty;
+        }
+
+        if ($attribute === 'backOrderQty') {
+            return $this->backOrderQty();
         }
 
         if ($attribute === 'model' && isset($this->associatedModel)) {
