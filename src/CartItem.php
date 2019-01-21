@@ -172,6 +172,28 @@ class CartItem implements Arrayable, Jsonable
     }
 
     /**
+     * @param string $availableAttributeName
+     * @return int
+     */
+    public function backOrderQty($availableAttributeName = 'available') : int
+    {
+        if(!isset($this->associatedModel)){
+            return null;
+        }
+
+        if(!isset($this->associatedModel->{$availableAttributeName})){
+            throw new \InvalidArgumentException('Please supply a valid available qty attribute name for this model.');
+        }
+
+        $backorder = 0;
+        $calc = $this->qty - $this->associatedModel->{$availableAttributeName};
+        if($calc > 0) $backorder = $calc;
+
+        return $backorder;
+
+    }
+
+    /**
      * Set the quantity for this cart item.
      *
      * @param int|float $qty
