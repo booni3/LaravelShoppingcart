@@ -141,7 +141,7 @@ class Cart
         }
 
         $content->put($cartItem->rowId, $cartItem);
-        
+
         $this->events->fire('cart.added', $cartItem);
 
         $this->session->put($this->instance, $content);
@@ -172,7 +172,7 @@ class Cart
         }
 
         $content->put($shippingItem->rowId, $shippingItem);
-        
+
         $this->events->fire('shipping.added', $shippingItem);
 
         $this->session->put($this->instance, $content);
@@ -317,13 +317,13 @@ class Cart
         if (! $this->storedCartWithIdentifierExists($identifier)) {
             return;
         }
-     
+
         $this->getConnection()->table($this->getTableName())
-        ->where([
-            'identifier' => $identifier,
-            'instance'   => $this->currentInstance()
-        ])->delete();
-     
+            ->where([
+                'identifier' => $identifier,
+                'instance'   => $this->currentInstance()
+            ])->delete();
+
         $this->events->fire('cart.store-destroyed');
     }
 
@@ -655,7 +655,9 @@ class Cart
         $this->getConnection()->table($this->getTableName())->insert([
             'identifier' => $identifier,
             'instance' => $this->currentInstance(),
-            'content' => serialize($content)
+            'content' => serialize($content),
+            'created_at' =>  \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
         ]);
 
         $this->events->fire('cart.stored');
@@ -670,10 +672,11 @@ class Cart
     {
         // Delete any Stored Instances
         $this->getConnection()->table($this->getTableName())
-        ->where([
-            'identifier' => $identifier,
-            'instance'   => $this->currentInstance()
-        ])->delete();
+            ->where([
+                'identifier' => $identifier,
+                'instance'   => $this->currentInstance(),
+                'updated_at' => \Carbon\Carbon::now(),
+            ])->delete();
 
         $this->store($identifier);
     }
@@ -847,7 +850,7 @@ class Cart
             $filter = $items->filter(function ($value, $key) {
                 return $value instanceof ShippingItem;
             })->all();
-            
+
             // Re-collect the output array
             $filter = collect($filter);
 
@@ -904,7 +907,7 @@ class Cart
             $filter = $items->filter(function ($value, $key) {
                 return $value instanceof DiscountItem;
             })->all();
-            
+
             // Re-collect the output array
             $filter = collect($filter);
 
@@ -937,7 +940,7 @@ class Cart
             $this->update($shipping->first()->rowID, ['price' => 0.00]);
             return true;
         }
-        
+
         return false;
     }
 
