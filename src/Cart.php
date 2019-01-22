@@ -674,8 +674,7 @@ class Cart
         $this->getConnection()->table($this->getTableName())
             ->where([
                 'identifier' => $identifier,
-                'instance'   => $this->currentInstance(),
-                'updated_at' => \Carbon\Carbon::now(),
+                'instance'   => $this->currentInstance()
             ])->delete();
 
         $this->store($identifier);
