@@ -377,21 +377,25 @@ class Cart
         foreach ($content as $row) {
             if ($row instanceof CartItem) {
                 if ($row->options->weight) {
-                    if ($row->options->unit == 'Metric') {
-                        $weightSplit['metric']  = $weightSplit['metric'] + ($row->options->weight * $row->qty);
-                    } else {
+                    if ($row->options->units == 'grams') {
+                        $metricUnits = 'grams';
+                        $weightSplit['metric'] = $weightSplit['metric'] + ($row->options->weight * $row->qty);
+                    } elseif ($row->options->units == 'pounds') {
+                        $imperialUnits = 'pounds';
                         $weightSplit['imperial']  = $weightSplit['imperial'] + ($row->options->weight * $row->qty);
+                    } else {
+                        throw new \Exception('Weight unit is not defined');
                     }
                 }
             }
         }
 
         // Convert the two types inot a total of each Type
-        $imperialTotal      = new Mass($weightSplit['imperial'], 'pounds');
-        $metricTotal        = new Mass($weightSplit['metric'], 'kilograms');
+        $imperialTotal      = new Mass($weightSplit['imperial'], $imperialUnits ?? 'pounds');
+        $metricTotal        = new Mass($weightSplit['metric'], $metricUnits ?? 'grams');
 
-        $imperialConversion = new Mass($imperialTotal->toUnit('kilograms'), 'kilograms');
-        $metricConversion   = new Mass($metricTotal->toUnit('pounds'), 'pounds');
+        $imperialConversion = new Mass($imperialTotal->toUnit('kilograms'), $metricUnits ?? 'grams');
+        $metricConversion   = new Mass($metricTotal->toUnit('pounds'), $imperialUnits ?? 'pounds');
 
         $weight = [
             'lbs'       => $imperialTotal->add($metricConversion)->toUnit('pounds'),
